@@ -1,0 +1,157 @@
+[
+    {
+        "city_id" : "1101",
+        "adcode" : "1100",
+        "city_name": "北京"
+    },
+    {
+        "city_id" : "1201",
+        "adcode" : "1200",
+        "city_name": "天津"
+    },
+    {
+        "city_id" : "1301",
+        "adcode" : "1301",
+        "city_name": "石家庄"
+    },
+    {
+        "city_id": "1201",
+        "adcode": "1200",
+        "city_name": "天津"
+    },
+    {
+        "city_id": "2101",
+        "adcode": "2101",
+        "city_name": "沈阳"
+    },
+    {
+        "city_id": "2102",
+        "adcode": "2102",
+        "city_name": "大连"
+    },
+    {
+        "city_id": "2201",
+        "adcode": "2201",
+        "city_name": "长春"
+    },
+    {
+        "city_id": "2301",
+        "adcode": "2301",
+        "city_name": "哈尔滨"
+    },
+    {
+        "city_id": "3101",
+        "adcode": "3100",
+        "city_name": "上海"
+    },
+    {
+        "city_id": "3201",
+        "adcode": "3201",
+        "city_name": "南京"
+    },
+    {
+        "city_id": "3202",
+        "adcode": "3202",
+        "city_name": "无锡"
+    },
+    {
+        "city_id": "3205",
+        "adcode": "3205",
+        "city_name": "苏州"
+    },
+    {
+        "city_id": "3301",
+        "adcode": "3301",
+        "city_name": "杭州"
+    },
+    {
+        "city_id": "3302",
+        "adcode": "3302",
+        "city_name": "宁波"
+    },
+    {
+        "city_id": "3401",
+        "adcode": "3401",
+        "city_name": "合肥"
+    },
+    {
+        "city_id": "3501",
+        "adcode": "3501",
+        "city_name": "福州"
+    },
+    {
+        "city_id": "3601",
+        "adcode": "3601",
+        "city_name": "南昌"
+    },
+    {
+        "city_id": "3702",
+        "adcode": "3702",
+        "city_name": "青岛"
+    },
+    {
+        "city_id": "4101",
+        "adcode": "4101",
+        "city_name": "郑州"
+    },
+    {
+        "city_id": "4201",
+        "adcode": "4201",
+        "city_name": "武汉"
+    },
+    {
+        "city_id": "4301",
+        "adcode": "4301",
+        "city_name": "长沙"
+    },
+    {
+        "city_id": "4401",
+        "adcode": "4401",
+        "city_name": "广州"
+    },
+    {
+        "city_id": "4403",
+        "adcode": "4403",
+        "city_name": "深圳"
+    },
+    {
+        "city_id": "4406",
+        "adcode": "4406",
+        "city_name": "佛山"
+    },
+    {
+        "city_id": "4419",
+        "adcode": "4419",
+        "city_name": "东莞"
+    },
+    {
+        "city_id": "4501",
+        "adcode": "4501",
+        "city_name": "南宁"
+    },
+    {
+        "city_id": "5001",
+        "adcode": "5000",
+        "city_name": "重庆"
+    },
+    {
+        "city_id": "5101",
+        "adcode": "5101",
+        "city_name": "成都"
+    },
+    {
+        "city_id": "5301",
+        "adcode": "5301",
+        "city_name": "昆明"
+    },
+    {
+        "city_id": "6101",
+        "adcode": "6101",
+        "city_name": "西安"
+    },
+    {
+        "city_id": "8100",
+        "adcode": "8100",
+        "city_name": "香港"
+    }
+]
