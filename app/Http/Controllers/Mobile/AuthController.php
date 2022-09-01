@@ -118,7 +118,8 @@ class AuthController extends  AbstractApiController
 
    public function logout()
    {
-       Auth::guard('api')->logout();
+     //  Auth::guard('api')->logout();
+       auth()->logout();
        return $this->success();
 
    }

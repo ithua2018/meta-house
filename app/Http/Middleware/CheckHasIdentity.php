@@ -18,10 +18,6 @@ class CheckHasIdentity
      */
     public function handle($request, Closure $next)
     {
-        if ($request->path() == 'm/user/regPwd'){
-            //首次登录设置密码时，先不校验用户身份,客户端可以通过post m/me 返回的userinfo=>role来判断.
-            return $next($request);
-        }
            $user = Auth::guard('api')->user();
            // console_debug($user);
             if(empty($user['current_role'])) {
