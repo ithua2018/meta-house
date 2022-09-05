@@ -4,6 +4,7 @@ namespace App\Console;
 
 
 use App\Console\Commands\Elasticsearch\SyncAreasCommand;
+use App\Console\Commands\SyncLianjiaDataCommand;
 use App\Console\Commands\SyncSubWayLinesCommand;
 use App\Console\Commands\TestCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -21,7 +22,9 @@ class Kernel extends ConsoleKernel
         TestCommand::class,
         //同步地铁信息
         SyncSubWayLinesCommand::class,
-        SyncAreasCommand::class
+        SyncAreasCommand::class,
+        SyncLianjiaDataCommand::class
+
     ];
 
     /**

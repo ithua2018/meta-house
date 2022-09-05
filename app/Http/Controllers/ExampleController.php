@@ -6,8 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Jobs\TestQueue;
 use App\Models\Collections\FakeImages;
-use App\Services\AmapService;
 use App\Services\EquipmentsService;
+use App\Services\Map\AmapService;
+use App\Services\Map\BaiduMapService;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Bschmitt\Amqp\Facades\Amqp;
 use Illuminate\Http\Request;
@@ -16,33 +17,38 @@ class ExampleController extends Controller
 {
     private AmapService $amapService;
     private EquipmentsService $equipmentsService;
+    private BaiduMapService $baiduMapService;
     public function __construct(
         AmapService $amapService,
-        EquipmentsService $equipmentsService
+        EquipmentsService $equipmentsService,
+        BaiduMapService $baiduMapService
     )
     {
         $this->amapService = $amapService;
         $this->equipmentsService = $equipmentsService;
+        $this->baiduMapService = $baiduMapService;
     }
 
     public function  test()
     {
-        $result = FakeImages::raw(function($collection){ return $collection->aggregate([ ['$sample' => ['size' => 3]] ]); });
-        return $result;
-        $imageModel = new FakeImages();
-        $count = $imageModel->count();
-        $images = FakeImages::take(3)->skip(rand(0,$count-1))->get()->toArray();
-        return $images;
-        $arr = [];
-        $imageModel->id = 1;
-        if($count>0) {
-            $imageModel->id = $count+1;
-        }
-        $imageModel->image_url = 'test.png';
-        $res = $imageModel->save();
-//        $arr =  $this->equipmentsService->getList();
-
-         return  $count;
+          return $this->amapService->getGeo('广东省深圳市宝安区建安一路110号');
+     //  return  $this->baiduMapService->getRegeo(113.90132891986873,22.565346963656413);
+//        $result = FakeImages::raw(function($collection){ return $collection->aggregate([ ['$sample' => ['size' => 3]] ]); });
+//        return $result;
+//        $imageModel = new FakeImages();
+//        $count = $imageModel->count();
+//        $images = FakeImages::take(3)->skip(rand(0,$count-1))->get()->toArray();
+//        return $images;
+//        $arr = [];
+//        $imageModel->id = 1;
+//        if($count>0) {
+//            $imageModel->id = $count+1;
+//        }
+//        $imageModel->image_url = 'test.png';
+//        $res = $imageModel->save();
+////        $arr =  $this->equipmentsService->getList();
+//
+//         return  $count;
     }
 
     public function store_with_mq(Request $request)

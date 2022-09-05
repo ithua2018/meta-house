@@ -9,6 +9,12 @@ return [
         'key' => '2046305c42a03e4df51ff6aceba68c87',
         'endpoint'=> 'https://restapi.amap.com/v3',
         'secret' => ''
+    ],
+    //百度地图
+    'bdmap' =>[
+        'key' => 'xyRLyQCvX9d4LijKbMDUPanHUkjhpyXZ',
+        'endpoint'=> 'https://api.map.baidu.com',
+        'secret' => ''
     ]
 
 ];

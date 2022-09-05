@@ -53,7 +53,12 @@ class HousesSearchController  extends  AbstractApiController
         if($defaultCity && empty($checkedCity)) {
             $q->where('city',$defaultCity);
         }
-        $role = $this->currentRole();
+        $user = auth('api')->user();
+        if(is_null($user)) { //游客
+            $role = UserConstants::USER_ROLE_TENANT;
+        } else {
+            $role = $user->current_role;
+        }
         switch ($role) {
             case UserConstants::USER_ROLE_LANDLOARD:  //房东
                 $q->where('is_owner', 0);
@@ -91,7 +96,12 @@ class HousesSearchController  extends  AbstractApiController
         }
         $data = explode(',', $current_point);
         $query = $this->houseService->getNearby($data, 10000);
-        $role = $this->currentRole();
+        $user = auth('api')->user();
+        if(is_null($user)) { //游客
+            $role = UserConstants::USER_ROLE_TENANT;
+        } else {
+            $role = $user->current_role;
+        }
         switch ($role) {
             case UserConstants::USER_ROLE_LANDLOARD:  //房东
                $query->where('is_owner',0);

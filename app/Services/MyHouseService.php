@@ -52,13 +52,16 @@ class MyHouseService  extends BaseService
        }
        $houseModel->type = $request->type;
        $houseModel->area = $request->area;
-       $houseModel->floor = $request->floor;
+      // $houseModel->floor = $request->floor;
        $houseModel->is_elevator = $request->is_elevator;
        $houseModel->price_range_min = $request->price_range_min;
        $houseModel->price_range_max = $request->price_range_max;
        $houseModel->vacancy_time = strtotime($request->vacancy_time);
-       $houseModel->halls = $request->halls;
-       $houseModel->rooms = $request->rooms;
+//       $houseModel->halls = $request->halls;
+//       $houseModel->rooms = $request->rooms;
+        $houseModel->house_structure = $request->house_structure;
+        $houseModel->lease_type = $request->lease_type;
+        $houseModel->lease_aging = $request->lease_aging;
        $houseModel->facilities = $request->facilities;
        $houseModel->lon = $request->lon;
        $houseModel->lat = $request->lat;
@@ -70,8 +73,11 @@ class MyHouseService  extends BaseService
           },$images);
            $houseModel->images =implode(',', $images);
        }
-       $houseModel->content = $request->introduction;
+       $houseModel->title = $request->title;
+       $houseModel->content = $request->desc;
+       $houseModel->address_extra = $request->address_extra;
        $houseModel->roommate = $request->roommate;
+       $houseModel->limit_people_number = $request->limit_people_number;
        $houseModel->address = $location['address'];
        $houseModel->country =  $location['country'];
        $houseModel->province =  $location['province'];
@@ -82,8 +88,7 @@ class MyHouseService  extends BaseService
        if($result) {
            $update ? event(new HouseCollecetionUpdatedEvent($houseModel)) : event(new HouseCollecetionCreatedEvent($houseModel));
        }
-
-       return $houseModel;
+       return $result;
     }
 
     /**

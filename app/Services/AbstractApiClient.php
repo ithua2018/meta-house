@@ -150,7 +150,7 @@ abstract class AbstractApiClient
                 $uri .= "?$this->keyParam=" . $this->getKey();
             }
         }
-
+     //   console_debug($uri);
         return $uri;
     }
 

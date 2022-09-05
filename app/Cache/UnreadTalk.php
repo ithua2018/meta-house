@@ -72,7 +72,6 @@ class UnreadTalk extends HashRedis
         while($cursor !== 0){
             // 命令位置 vendor\predis\predis\src\Command\HashScan.php
             $info =$this->redis()->hscan($this->getCacheKey(), $cursor, $pattern_arr);
-            console_debug($info);
             $cursor = intval($info[0] ?? 0);
             $list = $info[1] ?? [];
             if($list){

@@ -29,12 +29,6 @@ $router->group(['prefix' => 'm'], function () use ($router) {
             $router->post('me/house',  'Mobile\MyHouseController@store');
             $router->put('me/house/{id}',  'Mobile\MyHouseController@update');
             $router->delete('me/house/{id}',  'Mobile\MyHouseController@destory');
-            // Search routes
-            $router->group(['prefix' => 'search'], static function (): void {
-                Route::get('areas','Mobile\Search\AreaSearchController@index');
-                Route::get('houses-match','Mobile\Search\HousesSearchController@index');
-                Route::get('houses-nearby','Mobile\Search\HousesSearchController@nearby');
-            });
             //聊天
             $router->group(['prefix' => 'chat'], static function (): void {
                 //用户对话列表
@@ -46,12 +40,24 @@ $router->group(['prefix' => 'm'], function () use ($router) {
             });
 
         });
-        $router->get('equipments', 'Mobile\MyHouseController@equipments');
+
 
     });
+    // Search routes
+    $router->group(['prefix' => 'search'], static function (): void {
+        Route::get('areas','Mobile\Search\AreaSearchController@index');
+        Route::get('houses-match','Mobile\Search\HousesSearchController@index');
+        Route::get('houses-nearby','Mobile\Search\HousesSearchController@nearby');
+    });
 
+    $router->group(['prefix' => 'house'], static function (): void {
+        Route::get('settings','Mobile\HouseController@settings');
+        Route::get('detail/{id}','Mobile\HouseController@detail');
+    });
+
+   // $router->get('equipments', 'Mobile\MyHouseController@equipments');
 
 
 });
 
-$router->get('chargePay','Mobile\BrotherPayController@charge');
+//$router->get('chargePay','Mobile\BrotherPayController@charge');

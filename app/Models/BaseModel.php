@@ -35,6 +35,9 @@ class BaseModel extends Model
         parent::__construct($attributes);
     }
 
+    /**
+     * @return static
+     */
     public static function new()
     {
         return new static();

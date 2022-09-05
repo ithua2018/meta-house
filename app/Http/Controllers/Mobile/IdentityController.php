@@ -34,7 +34,7 @@ class IdentityController extends AbstractApiController
         $data = [
             ['id' => 1, 'name' => '房东'],
             ['id' => 2, 'name' => '租客'],
-            ['id' => 3, 'name' => '购房']
+            //['id' => 3, 'name' => '购房']
         ];
 
         return $this->success($data);

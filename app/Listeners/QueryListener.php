@@ -9,7 +9,7 @@ class QueryListener
     {
         if (env('APP_ENV', 'production') == 'local') {
             $sql = str_replace('?', "'%s'", $event->sql);
-            $log = vsprintf($sql, $event->bindings);
+            $log = @vsprintf($sql, $event->bindings);
             $this->put_log('sql', $log);
         }
     }
