@@ -43,18 +43,21 @@ class HouseService extends  BaseService
         }
         $isMulti = true;
         if(Arr::isAssoc($arr)) {
-            $arr = Arr::wrap($arr);
+            //$arr = Arr::wrap($arr);
+            $arr = [$arr];
             $isMulti = false;
         }
         $collect = collect($arr);
         $uuids =  collect($arr)->pluck('uuid')->unique()->toArray();
 
         $userInfo = UsersInformation::query()->whereIn('uuid', $uuids)->get(['uuid','nick_name'])->keyBy('uuid');
+
         $list =   $collect->map(static function($item)use($userInfo) {
             /**@var  UsersInformation $user*/
             $user = $userInfo->get($item['uuid']);
             $item['publisher'] = $user->nick_name??'';
             $item['avatar_show'] = $user->avatar_show??'';
+            $item['content'] = str_replace('n','', stripslashes($item['content']));
             unset($item['_id']);
             return $item;
         })->toArray();

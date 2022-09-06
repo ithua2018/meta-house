@@ -32,7 +32,8 @@ class HouseController extends AbstractApiController
         if(is_null($model)) {
             return $this->fail(ResponseCode::DATA_IS_NULL);
         }
-        return $this->success($model->toArray());
+        $detail = $this->houseService->parseHouseData($model->toArray());
+        return $this->success($detail);
 
     }
 

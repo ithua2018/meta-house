@@ -10,25 +10,29 @@ use App\Http\Requests\Mobile\SubmitHouseRequest;
 use App\Models\House;
 use App\Repositories\HouseRepository;
 use App\Services\EquipmentsService;
+use App\Services\HouseService;
 use App\Services\MyHouseService;
 
 class MyHouseController extends AbstractApiController
 {
     private HouseRepository $houseRepository;
     private  MyHouseService $houseService;
+    private HouseService  $house;
     private EquipmentsService  $equipmentsService;
     private LockRedis  $lockRedis;
     public function __construct(
         HouseRepository $houseRepository,
         MyHouseService $houseService,
         LockRedis  $lockRedis,
-        EquipmentsService  $equipmentsService
+        EquipmentsService  $equipmentsService,
+        HouseService  $house
     )
     {
         $this->houseRepository = $houseRepository;
         $this->houseService = $houseService;
         $this->lockRedis = $lockRedis;
         $this->equipmentsService = $equipmentsService;
+        $this->house =  $house;
     }
     /**
      * 列表
@@ -50,6 +54,8 @@ class MyHouseController extends AbstractApiController
        if(is_null($model)) {
            return $this->fail(ResponseCode::DATA_IS_NULL);
        }
+       $detail = $this->house->parseHouseData($model->toArray());
+       return $this->success($detail);
      return $this->success($model->toArray());
    }
 
@@ -96,6 +102,25 @@ class MyHouseController extends AbstractApiController
         return $this->fail(ResponseCode::CODE_SYSTEM_BUSY);
       }
    }
+    /**
+     * 是否上架
+     */
+    public function changeStatus($id)
+    {
+        $model = $this->houseRepository->getFirstWhere(['id'=>$id, 'uuid'=>$this->uuid()]);
+        if(is_null($model)) {
+            return $this->fail(ResponseCode::DATA_IS_NULL);
+        }
+        $model->status = $model->status == 1 ? 0 : 1;
+        $result =  $model->save();
+        if($result) {
+            event(new HouseCollecetionUpdatedEvent($model));
+        }
+        return  $this->failOrSuccess($result);
+    }
+
+
+
    /**
     * 设备列表
     */

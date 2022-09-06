@@ -29,6 +29,7 @@ $router->group(['prefix' => 'm'], function () use ($router) {
             $router->post('me/house',  'Mobile\MyHouseController@store');
             $router->put('me/house/{id}',  'Mobile\MyHouseController@update');
             $router->delete('me/house/{id}',  'Mobile\MyHouseController@destory');
+            $router->patch('me/house/status/{id}',  'Mobile\MyHouseController@changeStatus');
             //聊天
             $router->group(['prefix' => 'chat'], static function (): void {
                 //用户对话列表
