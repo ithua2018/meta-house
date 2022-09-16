@@ -32,6 +32,8 @@ $router->group(['prefix' => 'm'], function () use ($router) {
             $router->patch('me/house/status/{id}',  'Mobile\MyHouseController@changeStatus');
             //聊天
             $router->group(['prefix' => 'chat'], static function (): void {
+                //创建会话
+                Route::post('create','Mobile\TalkController@create');
                 //用户对话列表
                 Route::get('list','Mobile\TalkController@list');
                 //用户聊天记录
@@ -39,6 +41,12 @@ $router->group(['prefix' => 'm'], function () use ($router) {
                 //发送图片
                 Route::post('send-image','Mobile\TalkController@sendImage');
             });
+            //用户邀约看房
+            $router->get('invitation-records', 'Mobile\InvitationRecordsController@list');
+            $router->post('invitation-record', 'Mobile\InvitationRecordsController@create');
+            $router->put('invitation-record/{id}', 'Mobile\InvitationRecordsController@edit');
+            $router->delete('invitation-record', 'Mobile\InvitationRecordsController@destory');
+            $router->get('invitation-record/house/{id}', 'Mobile\InvitationRecordsController@house');
 
         });
 

@@ -82,7 +82,7 @@ class UsersInformation extends Model
         if(!empty($this->attributes['avatar'])){
             return config('rent.image_url').'/'.trim($this->attributes['avatar'], '/');
         }
-        return config('rent.image_url').'/storage/image/user/default_user_avatar.png';
+        return config('rent.image_url').config('rent.default_user_avatar');
     }
     //用户组
     public function User() {

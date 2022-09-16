@@ -69,7 +69,10 @@ function imgPathShift($new, $img)
     $path = 'storage/temporary/';
     $img = explode($path, $img);
     if (count($img) == 2) {
-        Storage::move('public/temporary/' . $img['1'], 'public/image/' . $new . '/' . $img['1']);
+        if (!Storage::exists('public/temporary/' . $img['1'])) {
+            throw new \App\Exceptions\BusinessException(\App\Constants\ResponseCode::UPLOAD_IMAGE_NOT_EXISTS);
+        }
+            Storage::move('public/temporary/' . $img['1'], 'public/image/' . $new . '/' . $img['1']);
         //拷贝不同规格的图片
         $imageSpecification = config('image.specification');
         $iarr = explode('.', $img['1']);
@@ -79,7 +82,7 @@ function imgPathShift($new, $img)
                 Storage::move('public/temporary/' . $img_specification, 'public/image/' . $new . '/' . $img_specification);
             }
         }
-        return '/storage/image/' . $new . '/' . $img['1'];
+        return 'storage/image/' . $new . '/' . $img['1'];
     } else {
         return $img['0'];
     }

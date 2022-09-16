@@ -34,7 +34,7 @@ class TalkService extends BaseService
         ];
 
         $rows =  DB::table('users_chat_list as list')
-            ->leftJoin('users_information as users', 'users.id', '=', 'list.friend_id')
+            ->leftJoin('users_information as users', 'users.uuid', '=', 'list.friend_id')
             ->where('list.uid', $user_id)
             ->where('list.status', 1)
             ->orderBy('updated_at', 'desc')
@@ -58,8 +58,8 @@ class TalkService extends BaseService
             $data['online']      = 0;
             $data['is_top']      = $item['is_top'];
             $data['not_disturb'] = $item['not_disturb'];
-            $data['name']       = $item['nick_name'];
-            $data['avatar']     = $item['avatar'];
+            $data['name']       = $item['nick_name'] ?:$item['friend_id'];
+            $data['avatar']     = $item['avatar'] ?: config('rent.image_url').config('rent.default_user_avatar');
             $data['unread_num'] = UnreadTalk::getInstance()->read((int)$item['friend_id'], $user_id);
             $data['online']     = $socketFDService->isOnlineAll($item['friend_id'], $runIdAll);
             $records = LastMessage::getInstance()->read((int)$item['type'], $user_id, $item['friend_id']);

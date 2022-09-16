@@ -4,6 +4,7 @@
  */
 return [
    'image_url' => 'http://112.74.63.93:11291',
+    'default_user_avatar' => '/storage/image/user/default_user_avatar.png',
     //高德地图
     'amap' => [
         'key' => '2046305c42a03e4df51ff6aceba68c87',

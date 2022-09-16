@@ -33,8 +33,11 @@ class ResponseCode
     const AUTH_NOT_SELECT_ROLE=[10010, '还未选择身份'];
     //上传错误  2XXXX
     const UPLOAD_COMMON_ERROR = [20001, ''];
-
+    const UPLOAD_IMAGE_NOT_EXISTS = [20002, '图片资源不存在,请重新上传'];
     //地理位置
     const LOCATION_INFO_ERROR = [30001, ''];
+
+    //聊天相关
+    const CHAT_CREAT_CONVERSATION = [6001, '创建会话失败'];
 
     }

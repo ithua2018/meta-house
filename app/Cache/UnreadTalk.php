@@ -74,13 +74,14 @@ class UnreadTalk extends HashRedis
             $info =$this->redis()->hscan($this->getCacheKey(), $cursor, $pattern_arr);
             $cursor = intval($info[0] ?? 0);
             $list = $info[1] ?? [];
+            $arr = [];
             if($list){
-                $arr = [];
                 foreach($list as $field => $v){
                     $arr[explode('_', $field)[0]] = $v;
                 }
             }
         }
+
         return  $arr ?? [];
         }
 

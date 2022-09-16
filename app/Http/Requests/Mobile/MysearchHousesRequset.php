@@ -15,7 +15,7 @@ class MysearchHousesRequset extends  Request
     public function rules(): array
     {
         return [
-            'type' => 'required|int|in: 1,2,3',
+            'type' => 'required|int|in: 0,1',
             'page' => 'integer',
             'limit' => 'integer'
         ];

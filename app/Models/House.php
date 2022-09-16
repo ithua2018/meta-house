@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Observers\HouseObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\House
@@ -63,16 +65,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 class House extends BaseModel
 {
- protected $hidden = [
-    'vacancy_time',
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+    protected $hidden = [
+     'vacancy_time',
      'halls',
      'rooms',
      'is_fake',
      'status',
      'deleted_at',
+     'rent_price',
+     'url_id',
+     'add_time',
+     'update_time'
    // 'images'
- ];
- protected $appends = ['vacancy_time_show', 'images_show', 'tags_show'];
+     ];
+    protected $appends = ['vacancy_time_show', 'images_show', 'tags_show', 'publish_time'];
 
  //空出房间的时间
  public function getVacancyTimeShowAttribute()
@@ -90,8 +98,9 @@ class House extends BaseModel
                $arr =  explode(',',$this->attributes['images']);
               return  array_map(function($item) {
                   //false !== strpos($item, '/storage/image/')
-                  if(false !== strpos($item, '/storage/image/')) {
-                      return config('rent.image_url').$item;
+                  $item = trim($item, '/');
+                  if(false !== strpos( $item, 'storage/image/')) {
+                      return config('rent.image_url').'/'.$item;
                   } else {
                       return config('rent.image_url').'/storage/image/fake/'.$item;
                   }
@@ -105,6 +114,14 @@ class House extends BaseModel
     {
         if(isset($this->attributes['tags'])) {
            return explode(';', $this->attributes['tags']);
+        }
+
+    }
+
+    public function getPublishTimeAttribute()
+    {
+        if(isset($this->attributes['add_time'])) {
+            return Carbon::parse($this->attributes['add_time'])->format('Y-m-d H:i:s');
         }
 
     }

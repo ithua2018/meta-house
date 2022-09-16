@@ -3,18 +3,14 @@ namespace  App\Services\Collections;
 use App\Models\Collections\House;
 use App\Models\MongDB\Store;
 use App\Services\BaseService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class HousesCollectionService extends BaseService
 {
-    private $collection;
     private $resourceModel;
 
     public function __construct()
     {
-        $connection          = DB::connection('mongodb');
-        $this->collection    = $connection->collection('houses_collection');
         $this->resourceModel = new House();
     }
 
@@ -25,7 +21,7 @@ class HousesCollectionService extends BaseService
     public function add(array $array):void
     {
         $this->handleLocation($array);
-        $result =  $this->collection->insert($array);
+        $result =  $this->resourceModel->insert($array);
         if($result) {
             Log::info($result);
         }
@@ -38,7 +34,7 @@ class HousesCollectionService extends BaseService
             return false;
         }
 
-        $update = $this->collection->where('id', $id)->update($fields);
+        $update = $this->resourceModel->where('id', $id)->update($fields);
         if($update) {
             //todo
         }
@@ -50,25 +46,25 @@ class HousesCollectionService extends BaseService
         if(!$res){
             return false;
         }
-        $this->collection->where('id', $id)->delete();
+        $this->resourceModel->where('id', $id)->delete();
     }
 
     public function getByUuid($id)
     {
-        return $this->collection->where('id', $id)->first();
+        return  $this->resourceModel->where('id', $id)->first();
     }
 
     //处理坐标
     private function handleLocation(&$arr) {
-                $arr['location'] = [
-                    (float)$arr['lon'] ,
-                    (float)$arr['lat']
-        ];
+       $arr['location'] = [
+                            (float)$arr['lon'] ,
+                            (float)$arr['lat']
+                        ];
     }
 
     public function nearby()
     {
-        $list =   $this->collection->where('location', 'near', [
+        $list =   $this->resourceModel->where('location', 'near', [
             '$geometry' => [
                 'type' => 'Point',
                 'coordinates' => [
@@ -88,7 +84,7 @@ class HousesCollectionService extends BaseService
             'count' => 0,
             'list' => []
         ];
-        $tcollection = $this->collection;
+        $tcollection = $this->resourceModel;
         $resourceTypeFieldService = new ResourceTypeFieldService();
         if($conditions && is_array($conditions)) {
             foreach ($conditions as &$condition) {

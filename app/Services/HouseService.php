@@ -2,13 +2,9 @@
 
 
 namespace App\Services;
-
-
 use App\Models\Collections\House as HouseCollecttion;
-use App\Models\House;
 use App\Models\UsersInformation;
 use Illuminate\Support\Arr;
-use Jenssegers\Mongodb\Query\Builder as QueryBuilder;
 class HouseService extends  BaseService
 {
     /**
@@ -43,7 +39,6 @@ class HouseService extends  BaseService
         }
         $isMulti = true;
         if(Arr::isAssoc($arr)) {
-            //$arr = Arr::wrap($arr);
             $arr = [$arr];
             $isMulti = false;
         }
@@ -57,7 +52,9 @@ class HouseService extends  BaseService
             $user = $userInfo->get($item['uuid']);
             $item['publisher'] = $user->nick_name??'';
             $item['avatar_show'] = $user->avatar_show??'';
+            $item['sex_show'] = $user->sex_show?? '';
             $item['content'] = str_replace('n','', stripslashes($item['content']));
+            $item['house_cover_img'] = !empty($item['images_show']) ? $item['images_show'][0]: '';
             unset($item['_id']);
             return $item;
         })->toArray();
@@ -65,6 +62,22 @@ class HouseService extends  BaseService
             return $list[0];
         }
         return $list;
+    }
+
+    /**
+     * @param $arr
+     * @param $fields
+     * @return void
+     */
+    public function getSimpleInfo($arr, $except=[], $only=[])
+    {
+      $arr = $this->parseHouseData($arr);
+      if($except == [] && $only == [])  return [];
+      $collection = collect($arr);
+      if(!empty($except)) {
+          return  $collection->except($except)->toArray();
+      }
+      return $collection->only($except)->toArray();
     }
 
     /**

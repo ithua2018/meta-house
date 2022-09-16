@@ -5,6 +5,7 @@ use App\Cache\Repository\LockRedis;
 use App\Constants\ResponseCode;
 use App\Constants\UserConstants;
 use App\Events\HouseCollecetionDeletedEvent;
+use App\Events\HouseCollecetionUpdatedEvent;
 use App\Http\Requests\Mobile\MysearchHousesRequset;
 use App\Http\Requests\Mobile\SubmitHouseRequest;
 use App\Models\House;

@@ -6,6 +6,8 @@ use App\Cache\LastMessage;
 use App\Cache\UnreadTalk;
 use App\Constants\ResponseCode;
 use App\Http\Requests\Mobile\ChatRecordsRequest;
+use App\Models\UsersChatList;
+use App\Models\UsersInformation;
 use App\Task\ChatTask;
 use Hhxsv5\LaravelS\Swoole\Task\Task;
 use Illuminate\Http\Request;
@@ -15,9 +17,8 @@ use Psr\Http\Message\ResponseInterface;
 use App\Model\EmoticonDetail;
 use App\Model\FileSplitUpload;
 use App\Model\User;
-use App\Model\UsersChatList;
-use App\Model\UsersFriend;
-use App\Model\Group\Group;
+//use App\Model\UsersFriend;
+//use App\Model\Group\Group;
 use App\Amqp\Producer\ChatMessageProducer;
 use App\Constants\SocketConstants;
 use League\Flysystem\Filesystem;
@@ -51,38 +52,27 @@ class TalkController extends AbstractApiController
 
     /**
      * 新增对话列表
-     * @RequestMapping(path="create", methods="post")
      *
      * @return ResponseInterface
      */
-    public function create()
+    public function create(Request $request)
     {
-        $params = $this->request->inputs(['type', 'receive_id']);
-        $this->validate($params, [
-            'type'       => 'required|in:1,2',
+        $params = $request->only(['receive_id']);
+        $this->validate($request, [
             'receive_id' => 'present|integer|min:0'
         ]);
 
         $user_id = $this->uuid();
-        if ($params['type'] == 1) {
-            if (!UsersFriend::isFriend($user_id, $params['receive_id'])) {
-                return $this->response->fail('暂不属于好友关系，无法进行聊天！');
-            }
-        } else {
-            if (!Group::isMember($params['receive_id'], $user_id)) {
-                return $this->response->fail('暂不属于群成员，无法进行群聊！');
-            }
-        }
 
-        $result = UsersChatList::addItem($user_id, $params['receive_id'], $params['type']);
+        $result = UsersChatList::addItem($user_id, $params['receive_id'], 1);
         if (!$result) {
-            return $this->response->fail('创建失败！');
+            return $this->fail(ResponseCode::CHAT_CREAT_CONVERSATION);
         }
 
         $data = [
             'id'          => $result['id'],
-            'type'        => $result['type'],
-            'group_id'    => $result['group_id'],
+            'type'        => 1,
+            'group_id'    => 0,
             'friend_id'   => $result['friend_id'],
             'is_top'      => 0,
             'msg_text'    => '',
@@ -94,31 +84,23 @@ class TalkController extends AbstractApiController
             'unread_num'  => 0,
             'updated_at'  => date('Y-m-d H:i:s')
         ];
+        /**@var  UsersInformation $userInfo*/
+        $userInfo = UsersInformation::where('uuid', $user_id)->first(['nick_name', 'avatar']);
 
-        if ($result['type'] == 1) {
-            $userInfo = User::where('id', $user_id)->first(['nickname', 'avatar']);
-
-            $data['name']       = $userInfo->nickname;
-            $data['avatar']     = $userInfo->avatar;
-            $data['unread_num'] = UnreadTalk::getInstance()->read($result['friend_id'], $user_id);
-        } else if ($result['type'] == 2) {
-            $groupInfo = Group::where('id', $result['group_id'])->first(['group_name', 'avatar']);
-
-            $data['name']   = $groupInfo->group_name;
-            $data['avatar'] = $groupInfo->avatar;
-        }
+        $data['name']       = $userInfo->nick_name;
+        $data['avatar']     = $userInfo->avatar;
+        $data['unread_num'] = UnreadTalk::getInstance()->read($result['friend_id'], $user_id);
 
         $records = LastMessage::getInstance()->read(
             (int)$result['type'], $user_id,
-            $result['type'] == 1 ? (int)$result['friend_id'] : (int)$result['group_id']
+           1
         );
 
         if ($records) {
             $data['msg_text']   = $records['text'];
             $data['updated_at'] = $records['created_at'];
         }
-
-        return $this->response->success(['talkItem' => $data]);
+        return $this->success(['talkItem' => $data]);
     }
 
     /**

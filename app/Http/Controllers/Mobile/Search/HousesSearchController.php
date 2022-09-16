@@ -28,6 +28,8 @@ class HousesSearchController  extends  AbstractApiController
         $q = House::query();
         $limit = $request->input('limit', 15);
         $page = $request->input('page', 1);
+        //筛选
+        $type = $request->input('type', '');
         $defaultCity = $request->input('defalutCity',  '');
         //深圳市-商圈-罗湖-桂圆街道
         $checkedCity = $request->input('checkedCity', '');
@@ -48,7 +50,31 @@ class HousesSearchController  extends  AbstractApiController
                 }
             }
         }
+        //整租 合租  转租
         $type = $request->input('type', '');
+        if($type) {
+            $q->where('type', $type);
+        }
+        //入住的人数
+        $person_number = $request->input('person_number', 0);
+        if($person_number) {
+            $q->where('limit_people_number', '>=', $person_number);
+        }
+
+        //租房金额范围
+        $price_range_min = $request->input('price_range_min', 0);
+        $price_range_max = $request->input('price_range_max', 0);
+        if($price_range_min!=0 && $price_range_max!=0) {
+            $q->where('price_range_min', $price_range_min)
+              ->where('price_range_max', $price_range_max);
+        }
+
+        //房间空出日期
+        $empty_date = $request->input('empty_date', '');
+        if($empty_date) {
+            $q->whereDate('vacancy_time', '<=', $empty_date);
+        }
+
         //默认当前城市
         if($defaultCity && empty($checkedCity)) {
             $q->where('city',$defaultCity);
